@@ -16,8 +16,7 @@ wmata_dat <- content(GET(wmata_url))
 
 ```
 
-`r nrow(wmata_dat)` delays were loaded. The first delay was at
-`r min(wmata_dat$Date, na.rm=TRUE)`; the last was at `r max(wmata_dat$Date, na.rm=TRUE)`.
+`r nrow(wmata_dat)` delays were loaded. 
 
 ```{r Process_Data}
 wmata_dat <- wmata_dat %>%
@@ -27,6 +26,8 @@ wmata_dat <- wmata_dat %>%
 ```
 
 The data was filtered to only include the `r nrow(wmata_dat)` events on the `r line_color` line.
+The first delay on that line was at
+`r format(min(wmata_dat$Date, na.rm=TRUE))`; the last was at `r format(max(wmata_dat$Date, na.rm=TRUE))`.
 Here are the three most common causes for delays on that line:
 _`r paste(names(head(sort(table(wmata_dat$Cause), decreasing = TRUE), 3)), sep=", ")`_.
 

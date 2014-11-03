@@ -1,1 +1,1 @@
-line_color = "Green"
+line_color = "Red"
