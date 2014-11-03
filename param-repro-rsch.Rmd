@@ -1,0 +1,55 @@
+---
+title: "Parameterizable Reproducible Research"
+author: "Your Name Here"
+output: html_document
+---
+
+`r opts_chunk$set(echo=FALSE, results='asis', cache=TRUE, message = FALSE, warning = FALSE)`
+
+This document illustrates the results of a parameterizable reproducible research process. It pulls
+train delay data from [WMATA](http://wmata.com/), then does some simple analyses on that data.
+
+```{r Load_Data}
+
+wmata_url <- "https://docs.google.com/spreadsheet/ccc?key=0ApyDIPnioxR3dEswVzIxb2NCdnZTLUZDZE9pTnhMcGc&usp=sharing&output=csv"
+wmata_dat <- content(GET(wmata_url))
+
+```
+
+`r nrow(wmata_dat)` delays were loaded. The first delay was at
+`r min(wmata_dat$Date, na.rm=TRUE)`; the last was at `r max(wmata_dat$Date, na.rm=TRUE)`.
+
+```{r Process_Data}
+wmata_dat <- wmata_dat %>%
+  filter(Line == line_color) %>%
+  mutate(Date = parse_date_time(paste(Date, str_replace_all(Time, "\\.", "")),
+                                "%m/%d/%Y %I/%M %p"))
+```
+
+The data was filtered to only include the `r nrow(wmata_dat)` events on the `r line_color` line.
+Here are the three most common causes for delays on that line:
+_`r paste(names(head(sort(table(wmata_dat$Cause), decreasing = TRUE), 3)), sep=", ")`_.
+
+This table shows the mean delay and counts of the most frequent causes:
+
+```{r Summarize_Data}
+
+delay_sum <- wmata_dat %>% 
+  group_by(Cause) %>% 
+  summarise(mean_delay=mean(Delay, na.rm=TRUE), n=n()) %>% 
+  arrange(-n, -mean_delay) %>% 
+  head(10)
+
+pander(delay_sum)
+
+```
+
+And this graph shows when delays happened by date and hour.
+
+```{r Plot_Data, fig.height=4, fig.width=6}
+ggplot(wmata_dat, aes(Date, hour(Date), size=Delay)) + 
+  geom_jitter() +
+  scale_y_continuous("Hour", breaks=c(0, 8, 12, 17, 24))
+
+```
+
