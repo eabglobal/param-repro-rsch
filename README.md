@@ -22,4 +22,7 @@ You can also do `./param-repro-rsch.R -h` to see the usage information.
 
 Written by Harlan Harris at the [Education Advisory Board](http://eab.com). 
 
-TBD: release as public domain under CC0?
+This work has been released into the public domain. Please see the
+[Creative Commons CC0 1.0 Universal](http://creativecommons.org/publicdomain/zero/1.0/) 
+dedication for details. A copy of the dedication is provided as `LICENSE.md`.
+

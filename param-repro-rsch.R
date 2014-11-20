@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 # param-repro-rsch.R
-# LICENSE?!?!
+# this work is in the public domain
 
 # This script generates a Parameterized Reproducibe Research report.
 # Run it at the command line, thusly:
